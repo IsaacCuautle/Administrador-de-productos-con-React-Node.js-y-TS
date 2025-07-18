@@ -1,4 +1,12 @@
-import { safeParse } from "valibot";
+import {
+  safeParse,
+  pipe,
+  number,
+  parse,
+  string,
+  transform,
+  boolean,
+} from "valibot";
 import axios from "axios";
 
 import {
@@ -70,6 +78,27 @@ export const addProduct = async (data: ProductData) => {
 };
 
 export const updateProduct = async (data: ProductData, id: Product["id"]) => {
-  console.log({ data });
-  console.log(id);
+  try {
+    const NumberSchema = pipe(string(), transform(Number), number());
+    const AvailabilitySchema = pipe(
+      string(),
+      transform((input) => input === "true"),
+      boolean()
+    );
+
+    const result = safeParse(ProductSchema, {
+      id,
+      name: data.name,
+      price: parse(NumberSchema, data.price),
+      availability: parse(AvailabilitySchema, data.availability),
+    });
+
+    if (result.success) {
+      const url = `${import.meta.env.VITE_API_URL}/api/products/${id}`;
+      await axios.put(url, result.output);
+    }
+  } catch (error) {
+    console.log("Ocurrio un error: ", error);
+  }
+  return;
 };
