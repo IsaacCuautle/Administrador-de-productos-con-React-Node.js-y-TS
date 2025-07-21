@@ -9,6 +9,12 @@ export const loader = async () => {
   return products;
 };
 
+export const action = async() => {
+  console.log('Desde action update');
+  
+  return
+}
+
 export default function Products() {
   const products = useLoaderData() as Product[];
 
