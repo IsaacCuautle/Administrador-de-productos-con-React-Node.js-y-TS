@@ -1,6 +1,6 @@
-import { Link, useLoaderData } from "react-router-dom";
+import { Link, useLoaderData, type ActionFunctionArgs } from "react-router-dom";
 
-import { getProducts } from "../services/ProductService";
+import { getProducts, updateAvailability } from "../services/ProductService";
 import ProductDetails from "../components/ProductDetails";
 import type { Product } from "../types";
 
@@ -9,11 +9,11 @@ export const loader = async () => {
   return products;
 };
 
-export const action = async() => {
-  console.log('Desde action update');
-  
-  return
-}
+export const action = async ({ request }: ActionFunctionArgs) => {
+  const data = Object.fromEntries(await request.formData());
+  await updateAvailability(+data.id);
+  return;
+};
 
 export default function Products() {
   const products = useLoaderData() as Product[];
@@ -40,12 +40,11 @@ export default function Products() {
               <th className="p-2">Acciones</th>
             </tr>
           </thead>
-          <tbody>{products.map(product => (
-            <ProductDetails
-              key={product.id}
-              product = {product}
-            />
-          ))}</tbody>
+          <tbody>
+            {products.map((product) => (
+              <ProductDetails key={product.id} product={product} />
+            ))}
+          </tbody>
         </table>
       </div>
     </>

@@ -107,11 +107,21 @@ export const deleteProduct = async (id: Product["id"]) => {
   try {
     const url = `${import.meta.env.VITE_API_URL}/api/products/${id}`;
     const result = await axios.delete(url);
-
-    console.log(result.status);
+    return result;
   } catch (error) {
     console.log(`\n Ocurrio un error: ${error}\n`);
   }
 
+  return;
+};
+
+export const updateAvailability = async (id: Product["id"]) => {
+  try {
+    const url = `${import.meta.env.VITE_API_URL}/api/products/${id}`;
+    const result = await axios.patch(url);
+    return result;
+  } catch (error) {
+    console.log(`\nOcurrio un error: ${error}\n`);
+  }
   return;
 };
