@@ -1,3 +1,4 @@
+/* eslint-disable react-refresh/only-export-components */
 import { Link, useLoaderData, type ActionFunctionArgs } from "react-router-dom";
 
 import { getProducts, updateAvailability } from "../services/ProductService";
