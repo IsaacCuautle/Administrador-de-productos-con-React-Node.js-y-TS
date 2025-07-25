@@ -1,22 +1,43 @@
 import { createBrowserRouter } from "react-router-dom";
 
 import Layout from "./layouts/Layout";
-import Products from "./views/Products";
-import NewProduct from "./views/NewProduct";
+import Products, {
+  loader as productsLoader,
+  action as actionUpdateAvailability,
+} from "./views/Products";
+import NewProduct, { action as NewProductAction } from "./views/NewProduct";
+import EditProduct, {
+  loader as EditProductLoader,
+  action as EditProductAction,
+} from "./views/EditProduct";
+import { action as DeleteProductAction } from "./components/ProductDetails";
 
 export const router = createBrowserRouter([
   {
     path: "/",
     element: <Layout />,
     children: [
-        {
-            index: true,
-            element: <Products/>
-        },
-        {
-            path: 'productos/nuevo',
-            element: <NewProduct/>
-        }
-    ]
+      {
+        index: true,
+        element: <Products />,
+        loader: productsLoader,
+        action: actionUpdateAvailability,
+      },
+      {
+        path: "productos/nuevo",
+        element: <NewProduct />,
+        action: NewProductAction,
+      },
+      {
+        path: "productos/:id/editar", //ROA Patter - Resource Oriented design
+        element: <EditProduct />,
+        action: EditProductAction,
+        loader: EditProductLoader,
+      },
+      {
+        path: "productos/:id/eliminar",
+        action: DeleteProductAction,
+      },
+    ],
   },
 ]);
